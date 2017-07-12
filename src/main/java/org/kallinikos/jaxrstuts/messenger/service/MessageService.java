@@ -1,8 +1,11 @@
 package org.kallinikos.jaxrstuts.messenger.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.annotation.W3CDomHandler;
 
 import org.kallinikos.jaxrstuts.messenger.database.DatabaseClass;
 import org.kallinikos.jaxrstuts.messenger.model.Message;
@@ -28,6 +31,26 @@ public class MessageService {
 //		return list;
 		
 		return new ArrayList<>(messages.values());
+	}
+	
+	public List<Message> getAllMessagesForYear(int year){
+		List<Message> messagesForYear = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		for (Message message : messages.values()) {
+			calendar.setTime(message.getCreated());
+			if(calendar.get(Calendar.YEAR)  == year) {
+				messagesForYear.add(message);
+			}
+		}
+		return messagesForYear;
+	}
+	
+	public List<Message> getAllMessagesPaginated(int start, int size) {
+		ArrayList<Message> list = new ArrayList<Message>(messages.values());
+		if (start + size > list.size())
+			return new ArrayList<Message>();
+		
+		return list.subList(start, start + size);
 	}
 	
 	public Message getMessage(long id) {
