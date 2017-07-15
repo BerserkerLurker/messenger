@@ -87,4 +87,10 @@ public class MessageResource {
 		return messageService.getMessage(messageId);
 	}
 	
+	// subresource
+	// no get, we need this method to be called for all http methods
+	@Path("/{messageId}/comments")
+	public CommentResource getCommentResource() {
+		return new CommentResource();
+	}
 }
