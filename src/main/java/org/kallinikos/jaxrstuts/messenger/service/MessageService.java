@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.W3CDomHandler;
 
 import org.kallinikos.jaxrstuts.messenger.database.DatabaseClass;
+import org.kallinikos.jaxrstuts.messenger.exception.DataNotFoundException;
 import org.kallinikos.jaxrstuts.messenger.model.Message;
 
 public class MessageService {
@@ -54,7 +55,11 @@ public class MessageService {
 	}
 	
 	public Message getMessage(long id) {
-		return messages.get(id);
+		Message message = messages.get(id);
+		if (message == null) {
+			throw new DataNotFoundException("Message with id " + id + " not found");
+		}
+		return message;
 	}
 	
 	public Message addMessage(Message message) {
