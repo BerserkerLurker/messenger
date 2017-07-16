@@ -1,5 +1,7 @@
 package org.kallinikos.jaxrstuts.messenger.model;
 
+import javax.management.relation.Relation;
+
 public class Link {
 
 	private String link;

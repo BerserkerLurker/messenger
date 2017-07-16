@@ -1,7 +1,6 @@
 package org.kallinikos.jaxrstuts.messenger.resources;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -25,14 +24,15 @@ import org.kallinikos.jaxrstuts.messenger.model.Message;
 import org.kallinikos.jaxrstuts.messenger.resources.beans.MessageFilterBean;
 import org.kallinikos.jaxrstuts.messenger.service.MessageService;
 
+import javassist.compiler.ast.Variable;
+
 @Path("/messages")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON) // use Content-type on header
+@Produces(value = {MediaType.APPLICATION_JSON, MediaType.TEXT_XML}) // use Accept on header value
 public class MessageResource {
-	
 	MessageService messageService = new MessageService();
 
-	@GET
+	
 	//@Produces(MediaType.TEXT_PLAIN)
 	//@Produces(MediaType.APPLICATION_XML)
 	//@Produces(MediaType.APPLICATION_JSON) //Using moxy (enabled in pom)
@@ -49,15 +49,14 @@ public class MessageResource {
 		
 		return messageService.getAllMessages();
 	}*/
-	
+	@GET
 	public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {
 		if (filterBean.getYear() > 0) {
 			return messageService.getAllMessagesForYear(filterBean.getYear());
 		}
-		if (filterBean.getStart() >= 0 && filterBean.getSize() >= 0) {
+		if (filterBean.getStart() >= 0 && filterBean.getSize() > 0) {
 			return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
 		}
-
 		return messageService.getAllMessages();
 	}
 
